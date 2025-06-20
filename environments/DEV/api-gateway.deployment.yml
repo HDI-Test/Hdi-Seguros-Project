@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  annotations:
+    mia-platform.eu/version: 14.0.0
+    apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
+    apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
+    fluentbit.io/parser: pino
+  labels:
+    app: api-gateway
+    app.kubernetes.io/name: api-gateway
+    app.kubernetes.io/version: v1.29.2
+    app.kubernetes.io/component: custom
+    app.kubernetes.io/part-of: hdi-seguros-project
+    app.kubernetes.io/managed-by: mia-platform
+    mia-platform.eu/stage: DEV
+    mia-platform.eu/tenant: 7898bbc0-aded-4fd1-8c5d-775cbf39427c
+    mia-platform.eu/log-type: mia-json
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  strategy:
+    type: RollingUpdate
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      annotations:
+        apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
+        apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
+        fluentbit.io/parser: pino
+      labels:
+        app: api-gateway
+        app.kubernetes.io/name: api-gateway
+        app.kubernetes.io/version: v1.29.2
+        app.kubernetes.io/component: custom
+        app.kubernetes.io/part-of: hdi-seguros-project
+        app.kubernetes.io/managed-by: mia-platform
+        mia-platform.eu/stage: DEV
+        mia-platform.eu/tenant: 7898bbc0-aded-4fd1-8c5d-775cbf39427c
+        mia-platform.eu/log-type: mia-json
+    spec:
+      imagePullSecrets:
+        - name: nexus-gcloud
+      terminationGracePeriodSeconds: 60
+      serviceAccountName: api-gateway
+      containers:
+        - name: api-gateway
+          image: nexus.mia-platform.eu/cache/envoyproxy/envoy:v1.29.2
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 250Mi
+              cpu: 200m
+            requests:
+              memory: 150Mi
+              cpu: 150m
+          volumeMounts:
+            - name: api-gateway-envoy-config
+              mountPath: /etc/envoy
+              readOnly: true
+          ports:
+            - name: frontend
+              containerPort: 8080
+            - name: backoffice
+              containerPort: 8081
+            - name: admin
+              containerPort: 9901
+          args:
+            - '-c'
+            - /etc/envoy/envoy.json
+            - '-l'
+            - '{{LOG_LEVEL}}'
+            - '--log-format'
+            - '{"level":"%l","time":"%Y-%m-%dT%T.%fZ","scope":"%n","message":"%j"}'
+            - '--drain-time-s'
+            - '50'
+          env:
+            - name: LOG_LEVEL
+              value: '{{LOG_LEVEL}}'
+            - name: MICROSERVICE_GATEWAY_SERVICE_NAME
+              value: microservice-gateway
+            - name: TRUSTED_PROXIES
+              value: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+            - name: HTTP_PORT
+              value: '3000'
+            - name: USERID_HEADER_KEY
+              value: miauserid
+            - name: GROUPS_HEADER_KEY
+              value: miausergroups
+            - name: CLIENTTYPE_HEADER_KEY
+              value: client-type
+            - name: BACKOFFICE_HEADER_KEY
+              value: isbackoffice
+            - name: USER_PROPERTIES_HEADER_KEY
+              value: miauserproperties
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - bash
+                  - '-c'
+                  - "echo -e 'POST /drain_listeners?graceful HTTP/1.1\r\nHost: localhost:9901\r\n\r' > /dev/tcp/localhost/9901 && sleep 55s"
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+            httpGet:
+              port: frontend
+              path: /healthz
+          livenessProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 1
+            failureThreshold: 3
+            httpGet:
+              port: frontend
+              path: /healthz
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+      volumes:
+        - name: api-gateway-envoy-config
+          configMap:
+            name: api-gateway-envoy-config
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
