@@ -1,0 +1,14 @@
+name: Deploy Workflow
+
+on: [push]
+
+jobs:
+  deploy_dev:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/mia-platform/base-pipeline:1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Deploy
+        run: bash ./scripts/deploy.sh
