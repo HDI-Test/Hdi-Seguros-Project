@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/mia-platform/base-pipeline:1
+    env:
+      JENKINS_JOB_TOKEN: ${{ secrets.JENKINS_JOB_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
