@@ -23,7 +23,7 @@ make_post_request() {
   return $exit_code
 }
 
-API_URL="https://console-to-kafka-test.console.gcp.mia-platform.eu/proxy/job/job-id/buildWithParameters"
+API_URL="https://poc-demo.free.beeceptor.com"
 TRIGGER_ID=$(cat /proc/sys/kernel/random/uuid)
 JOB_ID=test-pipeline-kafka-integration
 JOB_TOKEN=${JENKINS_JOB_TOKEN}
