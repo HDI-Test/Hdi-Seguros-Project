@@ -25,7 +25,19 @@ jobs:
           state: 'pending'
           deployment-id: ${{ github.event.deployment.id }}
       - name: Deploy my app
-        run: bash ./scripts/deploy.sh
+        run: |
+          ENV_DIR="manifests/deploy/environments/${{ github.event.deployment.environment }}"
+          for envfile in "$ENV_DIR"/*.env; do
+            if [ -f "$envfile" ]; then
+              jobId=$(grep '^JOB_ID=' "$envfile" | cut -d'=' -f2-)
+              if [ -n "$jobId" ]; then
+                echo "Deploying using JOB_ID=$jobId from $envfile"
+                bash ./scripts/deploy.sh "$jobId"
+              else
+                echo "No JOB_ID found in $envfile, skipping."
+              fi
+            fi
+          done
       - name: Update deployment status (success)
         if: success()
         uses: chrnorm/deployment-status@v2

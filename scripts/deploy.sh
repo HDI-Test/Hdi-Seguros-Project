@@ -38,7 +38,16 @@ JOB_ID=test-pipeline-kafka-integration
 JOB_TOKEN=${JENKINS_JOB_TOKEN}
 echo "JOB_TOKEN: $JOB_TOKEN"
 
-JSON_PAYLOAD=$(jq -n --arg trigger_id "${TRIGGER_ID}" --arg job_id ${JOB_ID} --arg token ${JOB_TOKEN} '{key: $trigger_id, jobId: $job_id, token: $token}')
+# Accept jobId as argument
+if [ -z "$1" ]; then
+  echo "Usage: $0 <jobId>"
+  exit 1
+fi
+
+JOB_ID="$1"
+echo "Using JOB_ID: $JOB_ID"
+
+JSON_PAYLOAD=$(jq -n --arg trigger_id "${TRIGGER_ID}" --arg job_id "$JOB_ID" --arg token ${JOB_TOKEN} '{key: $trigger_id, jobId: $job_id, token: $token}')
 echo "JSON_PAYLOAD: $JSON_PAYLOAD"
 
 # Execute the POST request
