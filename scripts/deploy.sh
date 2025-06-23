@@ -25,7 +25,12 @@ make_post_request() {
 
 API_URL="https://poc-demo.free.beeceptor.com"
 
-TRIGGER_ID=$(uuidgen)
+# Generate a random trigger ID (portable, works in most CI environments)
+if command -v openssl >/dev/null 2>&1; then
+  TRIGGER_ID=$(openssl rand -hex 16)
+else
+  TRIGGER_ID=$(cat /dev/urandom | tr -dc 'a-f0-9' | head -c32)
+fi
 echo "TRIGGER_ID: $TRIGGER_ID"
 
 JOB_ID=test-pipeline-kafka-integration
