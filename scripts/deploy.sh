@@ -33,8 +33,6 @@ else
 fi
 echo "TRIGGER_ID: $TRIGGER_ID"
 
-JOB_ID=test-pipeline-kafka-integration
-
 JOB_TOKEN=${JENKINS_JOB_TOKEN}
 echo "JOB_TOKEN: $JOB_TOKEN"
 

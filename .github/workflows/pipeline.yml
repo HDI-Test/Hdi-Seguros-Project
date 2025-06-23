@@ -29,6 +29,7 @@ jobs:
           ENV_DIR="manifests/deploy/environments/${{ github.event.deployment.environment }}"
           for envfile in "$ENV_DIR"/*.env; do
             if [ -f "$envfile" ]; then
+              echo "Reading $envfile"
               jobId=$(grep '^JOB_ID=' "$envfile" | cut -d'=' -f2-)
               if [ -n "$jobId" ]; then
                 echo "Deploying using JOB_ID=$jobId from $envfile"
