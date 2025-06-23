@@ -24,10 +24,17 @@ make_post_request() {
 }
 
 API_URL="https://poc-demo.free.beeceptor.com"
+
 TRIGGER_ID=$(cat /proc/sys/kernel/random/uuid)
+echo "TRIGGER_ID: $TRIGGER_ID"
+
 JOB_ID=test-pipeline-kafka-integration
+
 JOB_TOKEN=${JENKINS_JOB_TOKEN}
+echo "JOB_TOKEN: $JOB_TOKEN"
+
 JSON_PAYLOAD=$(jq -n --arg trigger_id "${TRIGGER_ID}" --arg job_id ${JOB_ID} --arg token ${JOB_TOKEN} '{key: $trigger_id, jobId: $job_id, token: $token}')
+echo "JSON_PAYLOAD: $JSON_PAYLOAD"
 
 # Execute the POST request
 echo "Making POST request to: $API_URL"
