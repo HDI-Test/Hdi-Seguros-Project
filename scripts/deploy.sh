@@ -25,7 +25,7 @@ make_post_request() {
 
 API_URL="https://poc-demo.free.beeceptor.com"
 
-TRIGGER_ID=$(cat /proc/sys/kernel/random/uuid)
+TRIGGER_ID=$(uuidgen)
 echo "TRIGGER_ID: $TRIGGER_ID"
 
 JOB_ID=test-pipeline-kafka-integration
