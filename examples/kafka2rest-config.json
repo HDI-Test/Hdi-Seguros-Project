@@ -1,0 +1,8 @@
+{
+    "hdi-poc": {
+        "baseUrl": "https://path-to-jenkins/",
+        "bodyProcessor": "to-form-url-encoded",
+        "pathProcessor": "jenkins-trigger",
+        "headerProcessor": "jenkins-token"
+    }
+}
