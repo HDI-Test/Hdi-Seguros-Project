@@ -34,7 +34,9 @@ To make the pipeline work, you must update the following secrets in your GitHub 
 To run the application with Docker, you need to mount each file from the `examples` directory into the container's `/config` directory. Below is an explicit example using all the files currently present in the `examples` directory:
 
 ```sh
-cd examples
+git clone git@github.com:HDI-Test/Hdi-Seguros-Project.git
+cd Hdi-Seguros-Project/examples
+docker login nexus.mia-platform.eu
 docker run --name kafka2rest --env-file local.env -v $(pwd)/bodyGenerators.js:/configs/bodyGenerators.js:ro -v $(pwd)/headerGenerators.js:/configs/headerGenerator.js:ro -v $(pwd)/kafka2rest-config.json:/configs/kafka2rest-config.json:ro -v $(pwd)/pathGenerators.js:/configs/pathGenerators.js:ro nexus.mia-platform.eu/plugins/kafka2rest:feat-support-non-json-body
 ```
 
