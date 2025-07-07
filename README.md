@@ -29,6 +29,27 @@ To make the pipeline work, you must update the following secrets in your GitHub 
 - The client must also allow pulling the following Docker image (ensure network access to this registry):
   - `nexus.mia-platform.eu/plugins/kafka2rest:feat-support-non-json-body`
 
+## Running Docker Image with All Example Files and Environment Variables
+
+To run the application with Docker, you need to mount each file from the `examples` directory into the container's `/config` directory. Below is an explicit example using all the files currently present in the `examples` directory:
+
+```sh
+cd examples
+docker run --name kafka2rest --env-file local.env -v $(pwd)/bodyGenerators.js:/configs/bodyGenerators.js:ro -v $(pwd)/headerGenerators.js:/configs/headerGenerator.js:ro -v $(pwd)/kafka2rest-config.json:/configs/kafka2rest-config.json:ro -v $(pwd)/pathGenerators.js:/configs/pathGenerators.js:ro nexus.mia-platform.eu/plugins/kafka2rest:feat-support-non-json-body
+```
+
+- `--env-file local.env` loads all environment variables defined in your `local.env` file.
+- Each `-v` flag mounts a specific file from the `examples` directory into `/config` inside the container as read-only.
+- Adjust the paths as needed if your files are located elsewhere.
+
+This setup allows the container to use all configuration and generator files from the `examples` directory, and environment variables from `local.env`, at runtime.
+
+You need to update the values on the [local.env](./examples/local.env) file:
+- KAFKA_BROKERS_LIST
+- KAFKA_SASL_USERNAME
+- KAFKA_SASL_PASSWORD
+
+
 ## Running kafka2rest Docker Image with a Mounted File
 
 To run the `nexus.mia-platform.eu/plugins/kafka2rest:feat-support-non-json-body` Docker image locally and mount a configuration file, use the following command:
@@ -44,32 +65,5 @@ docker run \
 - The file will be mounted as read-only (`:ro`) inside the container at `/app/config/config.yaml` (adjust the path as required by the application).
 
 This allows the container to use your custom configuration file at runtime.
-
-## Running Docker Image with All Example Files and Environment Variables
-
-To run the application with Docker, you need to mount each file from the `examples` directory into the container's `/config` directory. Below is an explicit example using all the files currently present in the `examples` directory:
-
-```sh
-docker run \
-  --name kafka2rest \
-  --env-file local.env \
-  -v $(pwd)/examples/bodyGenerators.js:/config/bodyGenerators.js:ro \
-  -v $(pwd)/examples/headerGenerators.js:/config/headerGenerators.js:ro \
-  -v $(pwd)/examples/kafka2rest-config.json:/config/kafka2rest-config.json:ro \
-  -v $(pwd)/examples/pathGenerators.js:/config/pathGenerators.js:ro \
-  nexus.mia-platform.eu/plugins/kafka2rest:feat-support-non-json-body
-```
-
-- `--env-file local.env` loads all environment variables defined in your `local.env` file.
-- Each `-v` flag mounts a specific file from the `examples` directory into `/config` inside the container as read-only.
-- Adjust the paths as needed if your files are located elsewhere.
-
-This setup allows the container to use all configuration and generator files from the `examples` directory, and environment variables from `local.env`, at runtime.
-
-You need to update the values on the [local.env](./examples/local.env) file:
-- KAFKA_BROKERS_LIST
-- KAFKA_SASL_USERNAME
-- KAFKA_SASL_PASSWORD
-
 
 
