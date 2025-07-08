@@ -30,6 +30,11 @@ To make the pipeline work, you must update the following secrets in your GitHub 
   - `nexus.mia-platform.eu/plugins/kafka2rest:feat-support-non-json-body`
 
 ## Running Docker Image with All Example Files and Environment Variables
+To run the packaged image you can run the following command:
+```sh
+run --name kafka2rest --env-file ./local.env nexus.mia-platform.eu/poc/jenkins-agent
+```
+To make any change to the configmaps you can edit [here](https://git.tools.mia-platform.eu/clients/7898bbc0-aded-4fd1-8c5d-775cbf39427c/platform/jenkins-agent) and create a new image.
 
 To run the application with Docker, you need to mount each file from the `examples` directory into the container's `/config` directory. Below is an explicit example using all the files currently present in the `examples` directory:
 
