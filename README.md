@@ -32,7 +32,7 @@ To make the pipeline work, you must update the following secrets in your GitHub 
 ## Running Docker Image with All Example Files and Environment Variables
 To run the packaged image you can run the following command:
 ```sh
-run --name kafka2rest --env-file ./local.env nexus.mia-platform.eu/poc/jenkins-agent
+docker run --name kafka2rest --env-file ./local.env nexus.mia-platform.eu/poc/jenkins-agent
 ```
 To make any change to the configmaps you can edit [here](https://git.tools.mia-platform.eu/clients/7898bbc0-aded-4fd1-8c5d-775cbf39427c/platform/jenkins-agent) and create a new image.
 
