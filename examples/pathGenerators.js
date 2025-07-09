@@ -3,6 +3,6 @@
 module.exports={
     'jenkins-trigger': (key, rawPayload) => {
         const payload = JSON.parse(rawPayload)
-        return `/job/${payload.jobId}/buildWithParameters?token=${payload.token}`
+        return `/jenkins/job/co-hdi-acc-sandbox/job/dev/job/${payload.jobId}/buildWithParameters`
     },
 }

@@ -1,0 +1,7 @@
+curl -X POST "https://jenkins.hdicolombia.com.co/jenkins/job/co-hdi-acc-sandbox/job/dev/job/co-hdi-secret-manager/buildWithParameters" \
+--user "USUARIO:JENKINS_API_TOKEN" \
+--data-urlencode "TrouxID=de34e7b8-adbb-4bcd-b7df-869c45b86308" \
+--data-urlencode "ProjectName=low-touch" \
+--data-urlencode "Suffix=secret" \
+--data-urlencode "RoleName=mi-rol-principal" \
+--data-urlencode "Json={\"key\":\"value\"}"
