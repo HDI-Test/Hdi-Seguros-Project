@@ -24,7 +24,6 @@ make_post_request() {
 }
 
 API_URL="https://console-to-kafka-test.console.gcp.mia-platform.eu/proxy/job/job-id/buildWithParameters"
-API_URL="https://poc-demo.free.beeceptor.com"
 
 # Generate a random trigger ID (portable, works in most CI environments)
 if command -v openssl >/dev/null 2>&1; then
