@@ -73,4 +73,13 @@ docker run \
 
 This allows the container to use your custom configuration file at runtime.
 
+## How to test the end to end process with Mia-Platform
+
+1. Go to the project on [Mia-Platform Console](https://console.cloud.mia-platform.eu/projects/68555d8048e364cdce509d68/design/revisions/main/config/custom-resources/repository-to-deploy) in the infrastructure resource section. Here you can find all the components included in the project that you can deploy. They can be applications, secrets or anything else.
+You can change the value inside each component. Those values will be used to trigger the correct pipeline on jenkins.
+If you need more components you can add them from the marketplace using the item-to-deploy component.
+2. Go the the [deploy section](https://console.cloud.mia-platform.eu/projects/68555d8048e364cdce509d68/deploy), select environment `Development` and click on deploy.
+3. A set of files will be saved on the [github repository](https://github.com/HDI-Test/Hdi-Seguros-Project/tree/main/manifests/deploy/environments/DEV). A pipeline will iterate over those files and will publish an event for each of them on Mia-Platform kafka cluster.
+4. The docker image of Mia-Platform Jenkins Agent connected to Mia-Platform cluster will read messages and will call Jenkins via APIs.
+Some values are hardcoded inside the image to speed up the integration. In order to change them you need to commit some changes on [its repository.](https://git.tools.mia-platform.eu/clients/7898bbc0-aded-4fd1-8c5d-775cbf39427c/platform/jenkins-agent)
 
