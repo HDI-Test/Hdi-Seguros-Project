@@ -31,6 +31,7 @@ jobs:
           for envfile in "$ENV_DIR"/*.env; do
             if [ -f "$envfile" ]; then
               echo "Reading $envfile"
+              echo "current directory is $(pwd)"
               source "$envfile"
               bash ./scripts/deploy.sh
             fi
