@@ -27,16 +27,12 @@ jobs:
       - name: Deploy my app
         run: |
           ENV_DIR="manifests/deploy/environments/${{ github.event.deployment.environment }}"
+          set -a
           for envfile in "$ENV_DIR"/*.env; do
             if [ -f "$envfile" ]; then
               echo "Reading $envfile"
-              jobId=$(grep '^JOB_ID=' "$envfile" | cut -d'=' -f2-)
-              if [ -n "$jobId" ]; then
-                echo "Deploying using JOB_ID=$jobId from $envfile"
-                bash ./scripts/deploy.sh "$jobId"
-              else
-                echo "No JOB_ID found in $envfile, skipping."
-              fi
+              source "$envfile"
+              bash ./scripts/deploy.sh
             fi
           done
       - name: Update deployment status (success)

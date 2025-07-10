@@ -24,6 +24,7 @@ make_post_request() {
 }
 
 API_URL="https://console-to-kafka-test.console.gcp.mia-platform.eu/proxy/job/job-id/buildWithParameters"
+API_URL="https://poc-demo.free.beeceptor.com"
 
 # Generate a random trigger ID (portable, works in most CI environments)
 if command -v openssl >/dev/null 2>&1; then
@@ -33,19 +34,38 @@ else
 fi
 echo "TRIGGER_ID: $TRIGGER_ID"
 
-JOB_TOKEN=${JENKINS_JOB_TOKEN}
+# Define all required variables with default values or environment variables
+JOB_TOKEN=${JENKINS_JOB_TOKEN:-""}
 echo "JOB_TOKEN: $JOB_TOKEN"
 
-# Accept jobId as argument
-if [ -z "$1" ]; then
-  echo "Usage: $0 <jobId>"
-  exit 1
-fi
+JOB_ID=${JOB_ID:-""}
+echo "JOB_ID: $JOB_ID"
 
-JOB_ID="$1"
-echo "Using JOB_ID: $JOB_ID"
+TROUX_ID=${TROUX_ID:-""}
+echo "TROUX_ID: $TROUX_ID"
 
-JSON_PAYLOAD=$(jq -n --arg trigger_id "${TRIGGER_ID}" --arg job_id "$JOB_ID" --arg token ${JOB_TOKEN} '{key: $trigger_id, jobId: $job_id, token: $token}')
+PROJECT_NAME=${PROJECT_NAME:-""}
+echo "PROJECT_NAME: $PROJECT_NAME"
+
+SUFFIX=${SUFFIX:-""}
+echo "SUFFIX: $SUFFIX"
+
+ROLE_NAME=${ROLE_NAME:-""}
+echo "ROLE_NAME: $ROLE_NAME"
+
+JSON_DATA=${Json:-"{}"}
+echo "JSON_DATA: $JSON_DATA"
+
+JSON_PAYLOAD=$(jq -n \
+  --arg jobId "$JOB_ID" \
+  --arg TrouxID "$TROUX_ID" \
+  --arg ProjectName "$PROJECT_NAME" \
+  --arg Suffix "$SUFFIX" \
+  --arg RoleName "$ROLE_NAME" \
+  --arg Json "$JSON_DATA" \
+  --arg token "$JOB_TOKEN" \
+  --arg triggerId "$TRIGGER_ID" \
+  '{jobId: $jobId, token: $token, TrouxID: $TrouxID, ProjectName: $ProjectName, Suffix: $Suffix, RoleName: $RoleName, Json: $Json, triggerId: $triggerId}')
 echo "JSON_PAYLOAD: $JSON_PAYLOAD"
 
 # Execute the POST request
