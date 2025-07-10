@@ -64,7 +64,7 @@ JSON_PAYLOAD=$(jq -n \
   --arg Json "$JSON_DATA" \
   --arg token "$JOB_TOKEN" \
   --arg triggerId "$TRIGGER_ID" \
-  '{jobId: $jobId, token: $token, TrouxID: $TrouxID, ProjectName: $ProjectName, Suffix: $Suffix, RoleName: $RoleName, Json: $Json, triggerId: $triggerId}')
+  '{jobId: $jobId, token: $token, TrouxID: $TrouxID, ProjectName: $ProjectName, Suffix: $Suffix, RoleName: $RoleName, Json: $Json, key: $triggerId}')
 echo "JSON_PAYLOAD: $JSON_PAYLOAD"
 
 # Execute the POST request
