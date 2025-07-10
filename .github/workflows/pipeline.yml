@@ -32,7 +32,7 @@ jobs:
             if [ -f "$envfile" ]; then
               echo "Reading $envfile"
               echo "current directory is $(pwd)"
-              source "$envfile"
+              . "$envfile"
               bash ./scripts/deploy.sh
             fi
           done
