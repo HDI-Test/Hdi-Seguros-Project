@@ -53,7 +53,7 @@ echo "SUFFIX: $SUFFIX"
 ROLE_NAME=${ROLE_NAME:-""}
 echo "ROLE_NAME: $ROLE_NAME"
 
-JSON_DATA=${Json:-"{}"}
+JSON_DATA=${JSON:-"{}"}
 echo "JSON_DATA: $JSON_DATA"
 
 JSON_PAYLOAD=$(jq -n \
