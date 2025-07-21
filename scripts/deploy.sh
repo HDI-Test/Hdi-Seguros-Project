@@ -23,7 +23,7 @@ make_post_request() {
   return $exit_code
 }
 
-API_URL="https://console-to-kafka-test.console.gcp.mia-platform.eu/proxy/job/job-id/buildWithParameters"
+API_URL="https://orchestrator-generator.test.mia-platform.eu/proxy/job/job-id/buildWithParameters"
 
 # Generate a random trigger ID (portable, works in most CI environments)
 if command -v openssl >/dev/null 2>&1; then
